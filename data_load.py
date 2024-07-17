@@ -33,3 +33,26 @@ data_asset = Data(
 registered_data = ml_client.data.create_or_update(data_asset)
 
 print("Dataset registered. Here is its ID:", registered_data.id)
+
+
+#Clen if required
+
+import pandas as pd
+from sklearn.impute import SimpleImputer
+
+# Example DataFrame 'df' loaded here
+# df = pd.read_csv("your_data.csv")
+
+# Create an imputer object for numeric columns using the mean
+numeric_imputer = SimpleImputer(strategy='mean')
+
+# For categorical data, you might want to use a constant such as 'missing' or the mode
+categorical_imputer = SimpleImputer(strategy='constant', fill_value='missing')
+
+# Apply imputers selectively
+for column in df.columns:
+    if df[column].dtype.kind in 'biufc':  # Numeric columns
+        df[column] = numeric_imputer.fit_transform(df[[column]])
+    else:  # Categorical columns
+        df[column] = categorical_imputer.fit_transform(df[[column]])
+
